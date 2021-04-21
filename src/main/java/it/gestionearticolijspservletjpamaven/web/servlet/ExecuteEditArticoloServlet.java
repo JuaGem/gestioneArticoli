@@ -19,56 +19,59 @@ import it.gestionearticolijspservletjpamaven.utility.UtilityArticoloForm;
 @WebServlet("/ExecuteEditArticoloServlet")
 public class ExecuteEditArticoloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public ExecuteEditArticoloServlet() {
-        super();
-    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ExecuteEditArticoloServlet() {
+		super();
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String idParam = request.getParameter("idArticolo");
 		String codiceInputParam = request.getParameter("codice");
 		String descrizioneInputParam = request.getParameter("descrizione");
 		String prezzoInputParam = request.getParameter("prezzo");
 		String dataArrivoStringParam = request.getParameter("dataArrivo");
-		
+
 		Date dataArrivoParsed = UtilityArticoloForm.parseDateArrivoFromString(dataArrivoStringParam);
-		
-		if(!UtilityArticoloForm.validateInput(codiceInputParam, descrizioneInputParam, prezzoInputParam, dataArrivoStringParam) || dataArrivoParsed == null) {
-			
+
+		if (!UtilityArticoloForm.validateInput(codiceInputParam, descrizioneInputParam, prezzoInputParam,
+				dataArrivoStringParam) || dataArrivoParsed == null) {
+
 			Articolo articoloInstance = new Articolo();
-			
+
 			articoloInstance.setId(Long.parseLong(idParam));
 			articoloInstance.setCodice(codiceInputParam);
 			articoloInstance.setDescrizione(descrizioneInputParam);
-			if(!prezzoInputParam.isEmpty())
+			if (!prezzoInputParam.isEmpty())
 				articoloInstance.setPrezzo(Integer.parseInt(prezzoInputParam));
 			articoloInstance.setDataArrivo(dataArrivoParsed);
-			
+
 			request.setAttribute("errorMessage", "Attenzione si è verificato un errore.");
 			request.setAttribute("modifica_attribute", articoloInstance);
 			request.getRequestDispatcher("/articolo/edit.jsp").forward(request, response);
 			return;
 		}
-		
-		Articolo articoloInstance = new Articolo(codiceInputParam, descrizioneInputParam, Integer.parseInt(prezzoInputParam), dataArrivoParsed);
-		
+
+		Articolo articoloInstance = new Articolo(codiceInputParam, descrizioneInputParam,
+				Integer.parseInt(prezzoInputParam), dataArrivoParsed);
+
 		articoloInstance.setId(Long.parseLong(idParam));
-		
+
 		try {
-			
+
 			MyServiceFactory.getArticoloServiceInstance().aggiorna(articoloInstance);
 			request.setAttribute("listaArticoliAttribute", MyServiceFactory.getArticoloServiceInstance().listAll());
 			request.setAttribute("successMessage", "Operazione effettuata con successo");
-		} catch(Exception e) {
-			
+		} catch (Exception e) {
+
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Attenzione si è modificato un errore.");
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			return;
 		}
-		
+
 		request.getRequestDispatcher("/articolo/results.jsp").forward(request, response);
-		
+
 	}
 
 }

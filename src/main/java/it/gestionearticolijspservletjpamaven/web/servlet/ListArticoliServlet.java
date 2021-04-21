@@ -20,7 +20,7 @@ public class ListArticoliServlet extends HttpServlet {
 		try {
 			request.setAttribute("listaArticoliAttribute", MyServiceFactory.getArticoloServiceInstance().listAll());
 		} catch (Exception e) {
-			//qui ci andrebbe un messaggio nei file di log costruito ad hoc se fosse attivo
+			// qui ci andrebbe un messaggio nei file di log costruito ad hoc se fosse attivo
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Attenzione si è verificato un errore.");
 			request.getRequestDispatcher("/index.jsp").forward(request, response);

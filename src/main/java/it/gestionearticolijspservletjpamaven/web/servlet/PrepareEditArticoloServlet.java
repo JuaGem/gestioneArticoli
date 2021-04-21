@@ -16,34 +16,36 @@ import it.gestionearticolijspservletjpamaven.service.MyServiceFactory;
 @WebServlet("/PrepareEditArticoloServlet")
 public class PrepareEditArticoloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public PrepareEditArticoloServlet() {
-        super();
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String idArticoloDaModificare = request.getParameter("idArticolo");
-	    
-	    if(!NumberUtils.isCreatable(idArticoloDaModificare)) {
-	    	request.setAttribute("errorMessage", "Attenzione si è modificato un errore.");
+	public PrepareEditArticoloServlet() {
+		super();
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String idArticoloDaModificare = request.getParameter("idArticolo");
+
+		if (!NumberUtils.isCreatable(idArticoloDaModificare)) {
+			request.setAttribute("errorMessage", "Attenzione si è modificato un errore.");
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			return;
-	    }
-	    
-	    try {
-	    	
-	    	request.setAttribute("modifica_attribute", MyServiceFactory.getArticoloServiceInstance().caricaSingoloElemento(Long.parseLong(idArticoloDaModificare)));
-	    	
-	    } catch(Exception e) {
-	    	
-	    	e.printStackTrace();
-	    	request.setAttribute("errorMessage", "Attenzione si è modificato un errore.");
+		}
+
+		try {
+
+			request.setAttribute("modifica_attribute", MyServiceFactory.getArticoloServiceInstance()
+					.caricaSingoloElemento(Long.parseLong(idArticoloDaModificare)));
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			request.setAttribute("errorMessage", "Attenzione si è modificato un errore.");
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			return;
-	    }
-	    
-	   RequestDispatcher rd = request.getRequestDispatcher("/articolo/edit.jsp");
-       rd.forward(request, response);
+		}
+
+		RequestDispatcher rd = request.getRequestDispatcher("/articolo/edit.jsp");
+		rd.forward(request, response);
 	}
 
 }

@@ -37,7 +37,7 @@ public class ExecuteVisualizzaArticoloServlet extends HttpServlet {
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			return;
 		}
-		
+
 		request.getRequestDispatcher("/articolo/show.jsp").forward(request, response);
 	}
 
